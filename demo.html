@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body ng-app="myapp" ng-controller="ctrl">
+<h1>Test Page</h1>
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script>
+<script>
+	var app=angular.module("myapp",[]);
+	app.config(function ( $httpProvider) {
+		//$httpProvider.defaults.withCredentials = true;
+        delete $httpProvider.defaults.headers.common["X-Requested-With"];
+        
+	});
+	app.controller('ctrl',  function($http){
+		var data={"email_id": "abc@gmail.com","password": "123"};
+		var req={
+			url:"http://162.17.231.114:121/SpinoService.svc/Login",
+			method:'POST',
+			Origin:"http://162.17.231.114:121/SpinoService.svc/Login",
+		    /*headers: {
+		    'Content-Type': 'application/json; charset=utf-8',
+		    'Content-Length': data.length
+		    },*/
+		    data
+		}
+
+		$http(req).success(function(data){
+			console.log(data)
+		}).error(function(err){
+			console.log(err);
+		})
+	});
+</script>
+</html>

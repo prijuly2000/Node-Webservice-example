@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web-Service</title>
+</head>
+<body ng-app="myApp" ng-controller="ctrl" >
+	<table cellpadding="5px" cellspacing="10px" style="display:inline;">
+		<caption>Web-Service data</caption>
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Image</th>
+				<th>Name</th>
+				<th>Note</th>
+				<th>Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in items">
+				<td>{{item.id}}</td>
+				<td>{{item.image}}</td>
+				<td>{{item.name}}</td>
+				<td>{{item.note}}</td>
+				<td>{{item.price | currency}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table style="display:inline;">
+		<caption>Add Products</caption>
+		<tbody>
+			<tr>
+				<td>Id</td>
+				<td><input type="number" ng-model="newItem.id"></input></td>
+			</tr>
+			<tr>
+				<td>Image</td>
+				<td><input type="text" ng-model="newItem.image"></input></td>
+			</tr>
+			<tr>
+				<td>Name</td>
+				<td><input type="text" ng-model="newItem.name"></input></td>
+			</tr>
+			<tr>
+				<td>Note</td>
+				<td><input type="text" ng-model="newItem.note"></input></td>
+			</tr>
+			<tr>
+				<td>Price</td>
+				<td><input type="number" ng-model="newItem.price"></input></td>
+			</tr>
+			<tr>
+				<td rowspan="2"><button ng-click="submit()" >Add</button></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script>
+<script>
+	var app = angular.module('myApp',[]);
+	app.controller('ctrl',function($scope,$http){
+		$http.post('/products').success(function(data){
+			$scope.items=data;
+		}).error(function(err){
+			alert(err);
+		})
+
+		$scope.submit=function(){
+			$http.post('/add',$scope.newItem).success(function(data){
+				if(data!="error"){
+					$scope.items=data;
+				}
+				else 
+					alert('Server down')
+			}).error(function(err){
+				alert('Product not added');
+			});
+		}
+	});
+</script>
+</html>
